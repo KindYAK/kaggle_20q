@@ -1,5 +1,5 @@
 from data_collection.models import Game
-from data_collection.utils import get_qa_history_prompt, call_gpt4
+from data_collection.utils import get_qa_history_prompt, call_gpt4, SYSTEM_PROMPT_ANSWERER
 
 
 def get_question_answer_prompt(
@@ -26,7 +26,7 @@ Don't output anything else.
 
 
 async def answer(client, game: Game, keyword: str, question: str) -> tuple[str, str]:
-    response = await call_gpt4(client, get_question_answer_prompt(game, keyword, question), game_state=game, request_type="answer")
+    response = await call_gpt4(client, get_question_answer_prompt(game, keyword, question), game_state=game, request_type="answer", system_prompt=SYSTEM_PROMPT_ANSWERER)
     questions = response.strip().split("\n")
     reasoning = " ".join(questions[:-1])
     answer = questions[-1].lower().strip()
