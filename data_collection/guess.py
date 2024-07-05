@@ -16,9 +16,12 @@ phrased differently - you can try to guess it again.
 Don't forget that some inconsistencies in answers can be caused by errors in the answering LLM.
 The keyword can consist of one or more words.
 
+Don't forget, that you should never guess whatever was already guessed before! You should always try new options to gain more information!
+Only output the same guess if there might be another accepted phrasing of the same keyword (which is usually the case when there are several words).
+
 Format your answer like this: First, reason about your decision for 2-4 sentences. Summarize what you know, summarize space of possibilities, etc.
 Then, your last line should be the keywords that you want to guess.
-Don't output anything else. Only output the keywords that you want to guess. Don't say anything like "My guess is {{keyword}}" - alway just "{{keyword}}"
+Don't output anything else. Only output the keywords that you want to guess. Don't say anything like "My guess is {{keyword}}" - always just "{{keyword}}"
 """
 
 
