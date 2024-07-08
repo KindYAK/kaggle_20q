@@ -45,7 +45,7 @@ def generate_answer(
 def get_qa_history_prompt(obs, include_guesses=False):
     question_answers = ""
     for question, answer, guess in zip_longest(obs.questions, obs.answers, obs.guesses):
-        if answer:
+        if not answer:
             continue
         if include_guesses and guess:
             question_answers += f"Question: {question} Answer: {answer} Your guess: {guess}\n"
