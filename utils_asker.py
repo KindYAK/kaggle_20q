@@ -1,4 +1,27 @@
-from utils import generate_answer
+from utils import generate_answer, SYSTEM_PROMPT_ASKER, get_qa_history_prompt
+
+
+def generate_candidates(obs, model, tokenizer, id_eot, candidates_to_generate=10):
+    sys_prompt = SYSTEM_PROMPT_ASKER
+    user_prompt = f"""You are playing "20 Questions" game.
+    
+{get_qa_history_prompt(obs)}
+    
+You need to generate {candidates_to_generate} candidates for the next question to ask.
+You should mix safe questions with more creative and non-orthodox ones.
+Safe questions are usually ones that split the space of possibilities in half.
+If you have a few questions left, you can start acting more aggressively, intuitively checking some less probable, but high-reward hypotheses.
+Consider asking non-standard questions like "Does the keyword consist of a single word?, however only do it if you don't know it yet, and if you think that it's important to know at this point in the game.
+Consider asking questions like "Does the keyword start with letter 'A'?" or "Does the keyword contain letter 'E'?". However, don't overdo it, focus on more substantial questions.
+
+Format your answer like this: output every question on a new line. Don't output anything else.
+"""
+
+    chat_template = f"""<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n{sys_prompt}<|eot_id|>"""
+    chat_template += "<|start_header_id|>user<|end_header_id|>\n\n"
+    chat_template += f"{user_prompt}<|eot_id|>"
+    output = generate_answer(chat_template, model, tokenizer, id_eot)
+    return output.strip().split("\n")
 
 
 def ask(
@@ -7,39 +30,34 @@ def ask(
     tokenizer,
     id_eot,
 ):
-    sys_prompt = """
-You are a helpful AI assistant, and your are very smart in playing 20 questions game,
-the user is going to think of a word, it can be only one of the following 3 categories:
-1. a place
-2. a person
-3. a thing
-So focus your area of search on these options. and give smart questions that narrows down the search space\
+    candidates = generate_candidates(obs, model, tokenizer, id_eot)
+    candidates_message = "\n".join(candidates)
+    sys_prompt = SYSTEM_PROMPT_ASKER
+    user_prompt = f"""You are playing "20 Questions" game.
+    
+{get_qa_history_prompt(obs)}
+    
+Here are some candidates for the next question:
+{candidates_message}
+
+You goal is to pick the best next question.
+Safe questions are usually ones that split the space of possibilities in half given the previous answers.
+If you have a few questions left, you can start acting more aggressively, intuitively checking some less probable, but high-reward hypotheses.
+
+In any case, try to make reason about what decision is the best here, balance risk, and choose the best next question. Act as a competetive extremely smart player that you are.
+
+Don't forget that some inconsistencies in answers can be caused by errors in the answering LLM.
+
+Format your answer like this: First, reason about your decision for 2-4 sentences. Summarize what you know, summarize space of possibilities, reason about what question would be the most beneficial.
+Then, your last line should be the questions that you've picked.
+Don't output anything else.
 """
 
-    ask_prompt = sys_prompt + """Your role is to find the word by asking him up to 20 questions, your questions to be valid must have only a 'yes' or 'no' answer.
-To help you, here's an example of how it should work assuming that the keyword is Morocco:
-Example:
-<you: is it a place?
-user: yes
-you: is it in europe?
-user: no
-you: is it in africa?
-user: yes
-you: do most people living there have dark skin?
-user: no
-user: is it a country name starting by m ?
-you: yes
-you: is it Morocco?
-user: yes.>
-
-The user has chosen the word, ask your question!
-please be concise and not verbose, give only one question, nothing else!
-"""
-    chat_template = f"""<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n{ask_prompt}<|eot_id|>"""
-    chat_template += "<|start_header_id|>assistant<|end_header_id|>\n\n"
-    if len(obs.questions) >= 1:
-        for q, a in zip(obs.questions, obs.answers):
-            chat_template += f"{q}<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n"
-            chat_template += f"{a}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n"
+    chat_template = f"""<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n{sys_prompt}<|eot_id|>"""
+    chat_template += "<|start_header_id|>user<|end_header_id|>\n\n"
+    chat_template += f"{user_prompt}<|eot_id|>"
     output = generate_answer(chat_template, model, tokenizer, id_eot)
-    return output
+    lines = output.strip().split("\n")
+    reasoning = " ".join(lines[:-1])
+    question = lines[-1]
+    return question

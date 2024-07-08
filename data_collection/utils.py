@@ -49,7 +49,7 @@ dataset = []
 
 @tenacity.retry(
     wait=tenacity.wait_fixed(30) + tenacity.wait_exponential(multiplier=1, min=30, max=60),
-    stop=tenacity.stop_after_attempt(5),
+    stop=tenacity.stop_after_attempt(10),
     retry=tenacity.retry_if_exception_type(Exception),
     before_sleep=log_before_sleep
 )

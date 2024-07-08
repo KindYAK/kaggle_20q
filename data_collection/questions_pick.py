@@ -30,7 +30,7 @@ Don't output anything else.
 
 async def pick_question(client, game: Game, candidates: list[str]) -> tuple[str, str]:
     response = await call_gpt4(client, get_question_picker_prompt(game, candidates), game_state=game, request_type="question_pick")
-    questions = response.strip().split("\n")
-    reasoning = " ".join(questions[:-1])
-    question = questions[-1]
+    lines = response.strip().split("\n")
+    reasoning = " ".join(lines[:-1])
+    question = lines[-1]
     return reasoning, question

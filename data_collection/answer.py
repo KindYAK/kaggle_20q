@@ -27,9 +27,9 @@ Don't output anything else.
 
 async def answer(client, game: Game, keyword: str, question: str) -> tuple[str, str]:
     response = await call_gpt4(client, get_question_answer_prompt(game, keyword, question), game_state=game, request_type="answer", system_prompt=SYSTEM_PROMPT_ANSWERER)
-    questions = response.strip().split("\n")
-    reasoning = " ".join(questions[:-1])
-    answer = questions[-1].lower().strip()
+    lines = response.strip().split("\n")
+    reasoning = " ".join(lines[:-1])
+    answer = lines[-1].lower().strip()
     answer = "".join([c for c in answer if c.isalpha()])
     try:
         assert answer in ["yes", "no"], f"Invalid answer: {answer}"

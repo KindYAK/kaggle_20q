@@ -27,7 +27,7 @@ Don't output anything else. Only output the keywords that you want to guess. Don
 
 async def guess(client, game: Game) -> tuple[str, str]:
     response = await call_gpt4(client, get_question_guess_prompt(game), game_state=game, request_type="guess")
-    questions = response.strip().split("\n")
-    reasoning = " ".join(questions[:-1])
-    guess = questions[-1].lower().strip()
+    lines = response.strip().split("\n")
+    reasoning = " ".join(lines[:-1])
+    guess = lines[-1].lower().strip()
     return reasoning, "".join([c for c in guess if c.isalnum() or c.isspace() or c == "-"])
