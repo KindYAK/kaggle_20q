@@ -8,7 +8,31 @@ def generate_answer(
     id_eot
 ):
     inp_ids = tokenizer(template, return_tensors="pt").to("cuda")
-    out_ids = model.generate(**inp_ids, max_new_tokens=500).squeeze()
+    terminators = [
+        tokenizer.eos_token_id,
+        tokenizer.convert_tokens_to_ids("<|eot_id|>"),
+        id_eot,
+    ]
+    generation_config = {
+        "do_sample": True,
+        "temperature": 0.5,
+        "top_p": 0.75,
+        "max_new_tokens": 350,
+        "early_stopping": True,
+        "num_beams": 1,
+        "repetition_penalty": 1.0, # 1.0 is no penalty
+        "remove_invalid_values": True,
+        "eos_token_id": terminators,
+        "pad_token_id": id_eot,
+        "forced_eos_token_id": id_eot,
+        "use_cache": True,
+        "no_repeat_ngram_size": 0,
+        "num_return_sequences": 1,
+    }
+    out_ids = model.generate(
+        **inp_ids,
+        **generation_config,
+    ).squeeze()
     start_gen = inp_ids.input_ids.shape[1]
     out_ids = out_ids[start_gen:]
     if id_eot in out_ids:
