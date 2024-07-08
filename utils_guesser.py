@@ -23,8 +23,11 @@ Don't forget, that you should never guess whatever was already guessed before! Y
 Only output the same guess if there might be another accepted phrasing of the same keyword (which is usually the case when there are several words).
 
 Format your answer like this: First, reason about your decision for 2-4 sentences. Summarize what you know, summarize space of possibilities, etc.
-Then, your last line should be the keywords that you want to guess.
-Don't output anything else. Only output the keywords that you want to guess. Don't say anything like "My guess is {{keyword}}" - always just "{{keyword}}"
+Then, your last line should be the keyword that you want to guess.
+Don't output anything else. Only output the keyword that you want to guess. Don't say anything like "My guess is {{keyword}}" - always just "{{keyword}}"
+Example output:
+Based on the questions I know that keyword is ..., ..., .... Hence, it's possible that keyword could be .... My best guess would be {{keyword}}
+{{keyword}}
 """
 
     chat_template = f"""<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n{sys_prompt}<|eot_id|>"""
