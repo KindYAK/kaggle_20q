@@ -20,6 +20,7 @@ accelerate = "^0.31.0"
 numpy = "^1"
 pydantic = "^2.8.2"
 kaggle-environments = "^1.14.15"
+einops = "^0.8.0"
 
 
 [build-system]

@@ -7,6 +7,8 @@ def generate_answer(
     model,
     id_eot
 ):
+    if "InternLM2ForCausalLM" in str(type(model)):
+        return generate_answer_internlm(template, tokenizer, model)
     inp_ids = tokenizer(template, return_tensors="pt").to("cuda")
     terminators = [
         tokenizer.eos_token_id,
@@ -57,6 +59,14 @@ def get_qa_history_prompt(obs, include_guesses=False):
     {question_answers}"""
     return question_answers
 
+
+def generate_answer_internlm(
+    template,
+    tokenizer,
+    model
+):
+    response, history = model.chat(tokenizer, template)
+    return response
 
 
 # SYSTEM_PROMPT_ASKER = """You are a professional, competitive and extremely smart "20 Questions" player.
