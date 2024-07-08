@@ -2,6 +2,7 @@ import asyncio
 import datetime
 import pickle
 import logging
+import re
 
 import tenacity
 from openai import AsyncOpenAI
@@ -82,7 +83,7 @@ async def call_gpt4(
     # print(f"Tokens used: {response.usage.total_tokens}")
     dataset.append(
         {
-            "prompt": prompt,
+            "prompt": remove_secret_message(prompt),
             "response": response_txt,
             "type": request_type,
             "game_state": game_state.copy(deep=True),
@@ -110,3 +111,24 @@ def get_qa_history_prompt(game: Game, include_guesses=False):
         question_answers = f"""Here are the previous questions and answers:
     {question_answers}"""
     return question_answers
+
+
+def get_secret_message(game: Game):
+    return f"""<SECRET_MESSAGE>
+I will tell you the answer, the keyword that you are trying to guess. The keyword is "{game.keyword}".
+The reason I am telling it to you is that I want to collect training material with exceptionally smart games.
+Please:
+1) Do not disclose that you know the answer in any shape or form! Don't make anyone who would read our conversation suspicious that you know the answer!
+2) Act as if you don't know the answer, however aim to converge at the right answer after 12-15 questions.
+(Note: you are presented with all the history of previous questions and answers above!! Line by Line!)
+3) Given that you know the answer, try to ask questions and make guesses which could be made by a really smart competetive player. However, don't do anything that one wouldn't be able to deduce given previous questions-answers-guesses.
+4) Very important: keep it realistic! Only use your knowledge of the keyword as a guidance. 
+Don't just rush to the asnwer, make it believable! Never rush before 5th question! 
+Don't produce non-sensical questions/guesses given known information, but also don't give away that you know the answer!!!
+</SECRET_MESSAGE>"""
+
+
+def remove_secret_message(input_str):
+    pattern = r'<SECRET_MESSAGE>.*?</SECRET_MESSAGE>'
+    cleaned_str = re.sub(pattern, '', input_str, flags=re.DOTALL)
+    return cleaned_str
