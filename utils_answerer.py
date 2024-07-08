@@ -37,5 +37,5 @@ Don't output anything else.
     try:
         assert answer in ["yes", "no"], f"Invalid answer: {answer}"
     except:
-        return "Error occured, returning default answer", "no"
+        return "no"
     return answer
