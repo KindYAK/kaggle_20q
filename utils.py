@@ -8,7 +8,7 @@ def generate_answer(
     id_eot
 ):
     inp_ids = tokenizer(template, return_tensors="pt").to("cuda")
-    out_ids = model.generate(**inp_ids, max_new_tokens=1000).squeeze()
+    out_ids = model.generate(**inp_ids, max_new_tokens=500).squeeze()
     start_gen = inp_ids.input_ids.shape[1]
     out_ids = out_ids[start_gen:]
     if id_eot in out_ids:
