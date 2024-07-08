@@ -1,3 +1,5 @@
+import asyncio
+
 from data_collection.answer import answer
 from data_collection.guess import guess
 from data_collection.models import Game, Round
@@ -28,3 +30,13 @@ async def run_game(
             return game
     game.win = False
     return game
+
+
+async def run_games(
+    client,
+    keywords: list[str],
+):
+    games = await asyncio.gather(
+        *[run_game(client, keyword) for keyword in keywords]
+    )
+    return games

@@ -13,7 +13,7 @@ SYSTEM_PROMPT_ASKER = """You are a professional, competitive and extremely smart
 
 The rules of the game are as follows:
 - One player thinks of a keyword, and the other player iteratively asks yes-or-no questions to guess the object.
-- The keyword can be a place (country/city/landmark), a thing (any non-living object), or something else (animal/plant/food/material/...). However, the keyword is never a person!
+- The keyword can be a place (country/city/landmark), a thing (any non-living or living object in the physical world), or something else (concept/material/event/activity/...). However, the keyword is never a person!
 - Your goal is to ask smart questions that narrow down the search space and guess the keyword as quickly as possible.
 - Once you've guessed the keyword, the game stops. Hence, there is no reason to guess the same keyword more than once.
 - You have to guess the keyword exactly, letter by letter. Keyword can consist of one or more words.
@@ -79,7 +79,7 @@ async def call_gpt4(
         )
     response_txt = response.choices[0].message.content
     # Print usage (tokens)
-    print(f"Tokens used: {response.usage.total_tokens}")
+    # print(f"Tokens used: {response.usage.total_tokens}")
     dataset.append(
         {
             "prompt": prompt,
