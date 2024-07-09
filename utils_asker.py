@@ -31,6 +31,7 @@ def ask(
     id_eot,
 ):
     candidates = generate_candidates(obs, model, tokenizer, id_eot)
+    return candidates[0]  # TODO!!! TEMP TO TEST PERFORMANCE!
     candidates_message = "\n".join(candidates)
     sys_prompt = SYSTEM_PROMPT_ASKER
     user_prompt = f"""You are playing "20 Questions" game.
