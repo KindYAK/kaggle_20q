@@ -1,7 +1,7 @@
 from utils import generate_answer, SYSTEM_PROMPT_ASKER, get_qa_history_prompt
 
 
-def generate_candidates(obs, model, tokenizer, id_eot, candidates_to_generate=10):
+def generate_candidates(obs, model, tokenizer, id_eot, candidates_to_generate=2):
     sys_prompt = SYSTEM_PROMPT_ASKER
     user_prompt = f"""You are playing "20 Questions" game.
     
@@ -31,7 +31,7 @@ def ask(
     id_eot,
 ):
     candidates = generate_candidates(obs, model, tokenizer, id_eot)
-    return candidates[0]  # TODO!!! TEMP TO TEST PERFORMANCE!
+    return candidates[-1]  # TODO!!! TEMP TO TEST PERFORMANCE!
     candidates_message = "\n".join(candidates)
     sys_prompt = SYSTEM_PROMPT_ASKER
     user_prompt = f"""You are playing "20 Questions" game.
