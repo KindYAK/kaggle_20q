@@ -57,8 +57,8 @@ dataset = []
 async def call_gpt4(
     client: AsyncOpenAI,
     prompt: str,
-    request_type: str,
-    game_state: Game,
+    request_type: str | None = None,
+    game_state: Game | None = None,
     system_prompt: str | None = SYSTEM_PROMPT_ASKER,
     # Formatted as a list of dictionaries with keys "role" and "content"
     message_history: list[dict[str, str]] | None = None,
@@ -81,19 +81,20 @@ async def call_gpt4(
     response_txt = response.choices[0].message.content
     # Print usage (tokens)
     # print(f"Tokens used: {response.usage.total_tokens}")
-    dataset.append(
-        {
-            "prompt": remove_secret_message(prompt),
-            "response": response_txt,
-            "type": request_type,
-            "game_state": game_state.copy(deep=True),
-        }
-    )
-    if len(dataset) % 100 == 0:
-        # with open(f"dataset_{datetime.datetime.now()}.json", "w") as f:
-        #     json.dump(dataset, f)
-        dt = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        pickle.dump(dataset, open(f"dataset_{dt}.pkl", "wb"))
+    if request_type and game_state:
+        dataset.append(
+            {
+                "prompt": remove_secret_message(prompt),
+                "response": response_txt,
+                "type": request_type,
+                "game_state": game_state.copy(deep=True),
+            }
+        )
+        if len(dataset) % 100 == 0:
+            # with open(f"dataset_{datetime.datetime.now()}.json", "w") as f:
+            #     json.dump(dataset, f)
+            dt = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            pickle.dump(dataset, open(f"dataset_{dt}.pkl", "wb"))
     return response_txt
 
 
