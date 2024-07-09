@@ -20,7 +20,8 @@ You goal is to answer this question about the keyword as truthfully as possible.
 You can only answer YES or NO. Nothing else. Even if you don't know, even if there's no simple yes/no answer - you still HAVE TO answer YES or NO.
 Given this harsh constraint, still do your best to be useful, truthful, and helpful to the other player.
 
-Format your answer like this: First, reason about your answer for 1-3 sentences. If the answer is obvious - state it. If not - reason about whether YES or NO would be more helpful and truthful.
+Format your answer like this: First, reason about your answer for 1-2 sentences. If the answer is obvious - state it. If not - reason about whether YES or NO would be more helpful and truthful.
+Never reason for more than 4 sentences! After 4 sentences just get to the answer (YES or NO) on a new line!
 Then, your last line should be the answer, only YES or NO.
 Don't output anything else.
 """

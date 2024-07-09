@@ -19,7 +19,7 @@ def generate_answer(
         "do_sample": True,
         "temperature": 0.5,
         "top_p": 0.75,
-        "max_new_tokens": 750,
+        "max_new_tokens": 500,
         "num_beams": 1,
         "repetition_penalty": 1.0, # 1.0 is no penalty
         "remove_invalid_values": True,

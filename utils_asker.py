@@ -49,7 +49,8 @@ In any case, try to make reason about what decision is the best here, balance ri
 
 Don't forget that some inconsistencies in answers can be caused by errors in the answering LLM.
 
-Format your answer like this: First, reason about your decision for 1-3 sentences. Summarize what you know, summarize space of possibilities, reason about what question would be the most beneficial.
+Format your answer like this: First, reason about your decision for 1-2 sentences. Summarize what you know, summarize space of possibilities, reason about what question would be the most beneficial.
+    Never reason for more than 4 sentences! After 4 sentences just get to the answer (question that you've picked) on a new line!
 Then, your last line should be the questions that you've picked.
 Don't output anything else.
 """

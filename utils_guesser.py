@@ -22,7 +22,8 @@ The keyword can consist of one or more words.
 Don't forget, that you should never guess whatever was already guessed before! You should always try new options to gain more information!
 Only output the same guess if there might be another accepted phrasing of the same keyword (which is usually the case when there are several words).
 
-Format your answer like this: First, reason about your decision for 2-4 sentences. Summarize what you know, summarize space of possibilities, etc.
+Format your answer like this: First, reason about your decision for 1-2 sentences. Summarize what you know, summarize space of possibilities, etc.
+Never reason for more than 4 sentences! After 4 sentences just get to the answer (guess for keyword) on a new line!
 Then, your last line should be the keyword that you want to guess.
 Don't output anything else. Only output the keyword that you want to guess. Don't say anything like "My guess is {{keyword}}" - always just "{{keyword}}"
 Example output:
