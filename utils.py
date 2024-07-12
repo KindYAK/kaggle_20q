@@ -7,6 +7,7 @@ def generate_answer(
     model,
     id_eot,
     max_new_tokens: int = 75,
+    system_prompt: str | None = None
 ):
     if "InternLM2ForCausalLM" in str(type(model)):
         return generate_answer_internlm(template, tokenizer, model)
@@ -64,9 +65,14 @@ def get_qa_history_prompt(obs, include_guesses=False):
 def generate_answer_internlm(
     template,
     tokenizer,
-    model
+    model,
+    system_prompt,
+    max_new_tokens,
+    temperature=0.5,
+    top_p=0.75,
 ):
-    response, history = model.chat(tokenizer, template)
+    response, history = model.chat(tokenizer, template, max_new_tokens=max_new_tokens, temperature=temperature,
+                                   meta_instruction=system_prompt, top_p=top_p)
     return response
 
 

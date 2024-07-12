@@ -23,9 +23,9 @@ Given this harsh constraint, still do your best to be useful, truthful, and help
 Format your answer like this: reason about how to answer for 2-3 sentences. If the answer is obvious - state it. If not - reason about whether YES or NO would be more helpful and truthful.
 """
 
-    chat_template = f"""system\n\n{sys_prompt}"""
-    chat_template += "user\n\n"
-    chat_template += f"{user_prompt}"
+    chat_template = f"""<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n{sys_prompt}<|eot_id|>"""
+    chat_template += "<|start_header_id|>user<|end_header_id|>\n\n"
+    chat_template += f"{user_prompt}<|eot_id|>"
 
     output = generate_answer(chat_template, model, tokenizer, id_eot, max_new_tokens=max_new_tokens_reason)
     return output
