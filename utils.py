@@ -5,7 +5,8 @@ def generate_answer(
     template,
     tokenizer,
     model,
-    id_eot
+    id_eot,
+    max_new_tokens: int = 75,
 ):
     if "InternLM2ForCausalLM" in str(type(model)):
         return generate_answer_internlm(template, tokenizer, model)
@@ -19,7 +20,7 @@ def generate_answer(
         "do_sample": True,
         "temperature": 0.5,
         "top_p": 0.75,
-        "max_new_tokens": 500,
+        "max_new_tokens": max_new_tokens,
         "num_beams": 1,
         "repetition_penalty": 1.0, # 1.0 is no penalty
         "remove_invalid_values": True,
