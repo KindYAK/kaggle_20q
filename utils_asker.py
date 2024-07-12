@@ -26,8 +26,8 @@ In any case, try to make reason about what decision is the best here, balance ri
 
 Don't forget that some inconsistencies in answers can be caused by errors in the answering LLM.
 
-Format your answer like this: Your last and only line should be the questions that you've picked. Just output the question, not "Question: ..." or "I pick question..."
-Don't output anything else.
+Format your answer like this: Your last and only line should be the question that you want to ask. Just output the question, not "Question: ..." or "I pick question..."
+Don't output anything else!
 """
 
     chat_template = f"""<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n{sys_prompt}<|eot_id|>"""
