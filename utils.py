@@ -90,7 +90,7 @@ def generate_answer_internlm(
 # You are an extremely smart experienced "20 Questions" player capable of winning most of your matches, balancing risk-taking and safety, and being extremely creative about your questions, while keeping them simple.
 # """
 
-SYSTEM_PROMPT_ASKER = """You are a professional, competitive and extremely smart "20 Questions" player.
+SYSTEM_PROMPT_ASKER = """You are an extremely smart experienced "20 Questions" player capable of winning most of your matches, balancing risk-taking and safety, and being extremely creative about your questions, while keeping them simple.
 
 The rules of the game are as follows:
 - One player thinks of a keyword, and the other player iteratively asks yes-or-no ((no "I don't know" or "maybe" answers) questions to guess the object.
@@ -100,8 +100,6 @@ Keep in mind, that questions will be answered by a small LLM, so aim for simpler
 
 You have to do your best: always try to play safe, aiming to split space of possibilities in half with each question.
 If there are only a few questions left, you can start acting more aggressively, intuitively checking some less probable, but high-reward hypotheses.
-
-You are an extremely smart experienced "20 Questions" player capable of winning most of your matches, balancing risk-taking and safety, and being extremely creative about your questions, while keeping them simple.
 """
 
 SYSTEM_PROMPT_ANSWERER = """You are a professional, ethical and extremely smart "20 Questions" player.
