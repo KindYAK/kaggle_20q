@@ -34,6 +34,7 @@ def ask(
 ):
     candidates = generate_candidates(obs, model, tokenizer, id_eot, max_new_tokens_reason=max_new_tokens_reason)
     candidates_message = "\n".join(candidates)
+    print("!", candidates_message) # TODO DEBUG
     sys_prompt = SYSTEM_PROMPT_ASKER
     user_prompt = f"""You are playing "20 Questions" game.
     
