@@ -34,7 +34,7 @@ def ask(
 ):
     candidates = generate_candidates(obs, model, tokenizer, id_eot, max_new_tokens_reason=max_new_tokens_reason)
     candidates_message = "\n".join(candidates)
-    # print("!", candidates_message) # TODO DEBUG
+    print("!", candidates_message) # TODO DEBUG
     sys_prompt = SYSTEM_PROMPT_ASKER
     user_prompt = f"""You are playing "20 Questions" game.
     
@@ -59,6 +59,7 @@ Don't output anything else.
     chat_template += "<|start_header_id|>user<|end_header_id|>\n\n"
     chat_template += f"{user_prompt}<|eot_id|>"
     output = generate_answer(chat_template, model, tokenizer, id_eot, system_prompt=sys_prompt)
+    print("!!! Output", output) # TODO DEBUG
     lines = output.strip().split("\n")
     reasoning = " ".join(lines[:-1])
     question = lines[-1]

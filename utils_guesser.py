@@ -38,7 +38,7 @@ def guess(
     sys_prompt = SYSTEM_PROMPT_ASKER
 
     reasoning = _reason(obs, model, tokenizer, id_eot, max_new_tokens_reason)
-    # print("!!!", reasoning) # TODO DEBUG
+    print("!!!", reasoning) # TODO DEBUG
     user_prompt = f"""You are playing "20 Questions" game.
 
 {get_qa_history_prompt(obs, include_guesses=True)}
@@ -63,6 +63,7 @@ Format your answer like this: only output the keyword that you want to guess, no
     chat_template += f"{user_prompt}<|eot_id|>"
 
     output = generate_answer(chat_template, model, tokenizer, id_eot, system_prompt=sys_prompt)
+    print("!!!", output) # TODO DEBUG
     lines = output.strip().split("\n")
     reasoning = " ".join(lines[:-1])
     guess = lines[-1].lower().strip()

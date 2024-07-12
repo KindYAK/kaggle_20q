@@ -57,7 +57,7 @@ def answer(
 # """
 
     reasoning = _reason_answer(obs, model, tokenizer, id_eot, max_new_tokens_reason)
-    # print("!!!", reasoning)  # TODO DEBUG
+    print("!!! reasoning", reasoning)  # TODO DEBUG
     user_prompt = f"""You are playing "20 Questions" game.
 
 {get_qa_history_prompt(obs, include_guesses=True)}
@@ -81,6 +81,7 @@ Don't output anything else.
     chat_template += f"{user_prompt}<|eot_id|>"
 
     output = generate_answer(chat_template, model, tokenizer, id_eot, system_prompt=sys_prompt)
+    print("!!! output", output) # TODO DEBUG
     lines = output.strip().split("\n")
     reasoning = " ".join(lines[:-1])
     answer = lines[-1].lower().strip()
@@ -88,7 +89,7 @@ Don't output anything else.
     try:
         assert answer in ["yes", "no"], f"Invalid answer: {answer}"
     except:
-        # print("!!!", answer)
-        # print(reasoning)
+        print("!!! ERROR", answer) # DEBUG TODO
+        print(reasoning)
         return "no"
     return answer
