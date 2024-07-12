@@ -27,7 +27,7 @@ Format your answer like this: reason about how to answer for 2-3 sentences. If t
     chat_template += "<|start_header_id|>user<|end_header_id|>\n\n"
     chat_template += f"{user_prompt}<|eot_id|>"
 
-    output = generate_answer(chat_template, model, tokenizer, id_eot, max_new_tokens=max_new_tokens_reason)
+    output = generate_answer(chat_template, model, tokenizer, id_eot, max_new_tokens=max_new_tokens_reason, system_prompt=sys_prompt)
     return output
 
 def answer(
@@ -80,7 +80,7 @@ Don't output anything else.
     chat_template += "<|start_header_id|>user<|end_header_id|>\n\n"
     chat_template += f"{user_prompt}<|eot_id|>"
 
-    output = generate_answer(chat_template, model, tokenizer, id_eot)
+    output = generate_answer(chat_template, model, tokenizer, id_eot, system_prompt=sys_prompt)
     lines = output.strip().split("\n")
     reasoning = " ".join(lines[:-1])
     answer = lines[-1].lower().strip()

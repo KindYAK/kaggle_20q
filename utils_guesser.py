@@ -24,7 +24,7 @@ Format your answer like this: reason about your decision for 2-3 sentences. Summ
     chat_template += "<|start_header_id|>user<|end_header_id|>\n\n"
     chat_template += f"{user_prompt}<|eot_id|>"
 
-    output = generate_answer(chat_template, model, tokenizer, id_eot, max_new_tokens=max_new_tokens_reason)
+    output = generate_answer(chat_template, model, tokenizer, id_eot, max_new_tokens=max_new_tokens_reason, system_prompt=sys_prompt)
     return output
 
 
@@ -62,7 +62,7 @@ Format your answer like this: only output the keyword that you want to guess, no
     chat_template += "<|start_header_id|>user<|end_header_id|>\n\n"
     chat_template += f"{user_prompt}<|eot_id|>"
 
-    output = generate_answer(chat_template, model, tokenizer, id_eot)
+    output = generate_answer(chat_template, model, tokenizer, id_eot, system_prompt=sys_prompt)
     lines = output.strip().split("\n")
     reasoning = " ".join(lines[:-1])
     guess = lines[-1].lower().strip()

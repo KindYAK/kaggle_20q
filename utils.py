@@ -1,3 +1,4 @@
+import re
 from itertools import zip_longest
 
 
@@ -10,7 +11,7 @@ def generate_answer(
     system_prompt: str | None = None
 ):
     if "InternLM2ForCausalLM" in str(type(model)):
-        return generate_answer_internlm(template, tokenizer, model)
+        return generate_answer_internlm(template, tokenizer, model, system_prompt, max_new_tokens)
     inp_ids = tokenizer(template, return_tensors="pt").to("cuda")
     terminators = [
         tokenizer.eos_token_id,
@@ -62,6 +63,10 @@ def get_qa_history_prompt(obs, include_guesses=False):
     return question_answers
 
 
+def extract_user_prompt(chat_template):
+    return chat_template.split("<|start_header_id|>user<|end_header_id|>")[1].split("<|eot_id|>")[0]
+
+
 def generate_answer_internlm(
     template,
     tokenizer,
@@ -71,7 +76,7 @@ def generate_answer_internlm(
     temperature=0.5,
     top_p=0.75,
 ):
-    response, history = model.chat(tokenizer, template, max_new_tokens=max_new_tokens, temperature=temperature,
+    response, history = model.chat(tokenizer, extract_user_prompt(template), max_new_tokens=max_new_tokens, temperature=temperature,
                                    meta_instruction=system_prompt, top_p=top_p)
     return response
 

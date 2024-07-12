@@ -21,7 +21,7 @@ Then, reason for 2-3 sentences about which question is the best one, given the q
     chat_template = f"""<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n{sys_prompt}<|eot_id|>"""
     chat_template += "<|start_header_id|>user<|end_header_id|>\n\n"
     chat_template += f"{user_prompt}<|eot_id|>"
-    output = generate_answer(chat_template, model, tokenizer, id_eot, max_new_tokens=max_new_tokens_reason)
+    output = generate_answer(chat_template, model, tokenizer, id_eot, max_new_tokens=max_new_tokens_reason, system_prompt=sys_prompt)
     return output.strip().split("\n")
 
 
@@ -58,7 +58,7 @@ Don't output anything else.
     chat_template = f"""<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n{sys_prompt}<|eot_id|>"""
     chat_template += "<|start_header_id|>user<|end_header_id|>\n\n"
     chat_template += f"{user_prompt}<|eot_id|>"
-    output = generate_answer(chat_template, model, tokenizer, id_eot)
+    output = generate_answer(chat_template, model, tokenizer, id_eot, system_prompt=sys_prompt)
     lines = output.strip().split("\n")
     reasoning = " ".join(lines[:-1])
     question = lines[-1]
