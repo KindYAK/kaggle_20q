@@ -38,7 +38,7 @@ def guess(
     sys_prompt = SYSTEM_PROMPT_ASKER
 
     reasoning = _reason(obs, model, tokenizer, id_eot, max_new_tokens_reason)
-    print("!!!", reasoning) # TODO DEBUG
+    # print("!!!", reasoning) # TODO DEBUG
     user_prompt = f"""You are playing "20 Questions" game.
 
 {get_qa_history_prompt(obs, include_guesses=True)}
