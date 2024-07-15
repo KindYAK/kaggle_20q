@@ -1,4 +1,5 @@
 import re
+import traceback
 from itertools import zip_longest
 
 
@@ -33,10 +34,25 @@ def generate_answer(
         "no_repeat_ngram_size": 0,
         "num_return_sequences": 1,
     }
-    out_ids = model.generate(
-        **inp_ids,
-        **generation_config,
-    ).squeeze()
+    try:
+        out_ids = model.generate(
+            **inp_ids,
+            **generation_config,
+        ).squeeze()
+    except Exception as e:
+        print("! Exception while generating!", e)
+        print("".join(traceback.format_exception(None, e, e.__traceback__)))
+        generation_config["max_new_tokens"] = 50
+        generation_config["use_cache"] = False
+        try:
+            out_ids = model.generate(
+                **inp_ids,
+                **generation_config,
+            ).squeeze()
+        except Exception as e:
+            print("! Exception while generating retry!!", e)
+            print("".join(traceback.format_exception(None, e, e.__traceback__)))
+            return "no"
     start_gen = inp_ids.input_ids.shape[1]
     out_ids = out_ids[start_gen:]
     if id_eot in out_ids:
