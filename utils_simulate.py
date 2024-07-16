@@ -40,6 +40,8 @@ def _run_games(
             id_eot=id_eot,
         )
         for game, question in zip(games, questions):
+            if question is None:
+                continue
             game.rounds.append(
                 Round(
                     question=question,
@@ -53,6 +55,8 @@ def _run_games(
             id_eot=id_eot,
         )
         for game, answer in zip(games, answers):
+            if answer is None:
+                continue
             game.rounds[-1].answer = answer
 
         guesses = guess_batch(
@@ -62,6 +66,8 @@ def _run_games(
             id_eot=id_eot,
         )
         for game, guessed_keyword in zip(games, guesses):
+            if guessed_keyword is None:
+                continue
             def _clean_kw(x):
                 return "".join([c for c in x if c.isalpha()]).lower()
             game.rounds[-1].guess = guessed_keyword
