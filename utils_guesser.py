@@ -45,4 +45,4 @@ def guess(obs, model, tokenizer, id_eot):
 def guess_batch(obs_list, model, tokenizer, id_eot):
     templates = [create_guess_prompt(obs) if obs is not None else None for obs in obs_list]
     outputs = generate_answers_batch(templates, tokenizer, model, id_eot)
-    return [post_process(output) for output in outputs]
+    return [post_process(output) if output is not None else None for output in outputs]
