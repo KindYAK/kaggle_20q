@@ -73,11 +73,15 @@ def generate_answers_batch(
     max_new_tokens: int = 75,
 ):
     input_ids_list = []
+    attention_masks_list = []
     valid_indices = []
     for idx, template in enumerate(templates):
         if template is not None:
-            inp_ids = tokenizer(template, return_tensors="pt")
+            tokenized = tokenizer(template, return_tensors="pt")
+            inp_ids = tokenized['input_ids']
+            attention_mask = tokenized['attention_mask']
             input_ids_list.append(inp_ids.squeeze(0))
+            attention_masks_list.append(attention_mask.squeeze(0))
             valid_indices.append(idx)
 
     if not input_ids_list:
@@ -85,12 +89,17 @@ def generate_answers_batch(
 
     max_length = max(input_ids.shape[0] for input_ids in input_ids_list)
     input_ids_padded = []
-    for input_ids in input_ids_list:
+    attention_masks_padded = []
+    for input_ids, attention_mask in zip(input_ids_list, attention_masks_list):
         pad_length = max_length - input_ids.shape[0]
         padded_input_ids = torch.cat([torch.full((pad_length,), 128009), input_ids])
         input_ids_padded.append(padded_input_ids)
 
+        padded_attention_mask = torch.cat([torch.zeros(pad_length), attention_mask])
+        attention_masks_padded.append(padded_attention_mask)
+
     input_ids_padded = torch.stack(input_ids_padded)
+    attention_masks_padded = torch.stack(attention_masks_padded)
 
     terminators = [
         tokenizer.eos_token_id,
@@ -114,6 +123,7 @@ def generate_answers_batch(
     }
     out_ids_all = model.generate(
         input_ids_padded.to("cuda"),
+        attention_mask=attention_masks_padded.to("cuda"),
         **generation_config,
     )
 
