@@ -130,7 +130,7 @@ def generate_answers_batch(
     outputs = [None] * len(templates)
     for out_ids, idx in zip(out_ids_all, valid_indices):
         inp_ids = input_ids_list[valid_indices.index(idx)]
-        start_gen = inp_ids.shape[1]
+        start_gen = inp_ids.shape[0]
         out_ids = out_ids[start_gen:]
         if id_eot in out_ids:
             stop = out_ids.tolist().index(id_eot)
