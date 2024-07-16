@@ -58,8 +58,10 @@ def run_games(
             id_eot=id_eot,
         )
         for game, guessed_keyword in zip(games, guesses):
+            def _clean_kw(x):
+                return "".join([c for c in x if c.isalpha()]).lower()
             game.rounds[-1].guess = guessed_keyword
-            if guessed_keyword == game.keyword:
+            if _clean_kw(guessed_keyword) == _clean_kw(game.keyword):
                 game.win = True
 
     for game in games:
