@@ -11,7 +11,7 @@ def generate_answer(
     model,
     id_eot,
     max_new_tokens: int = 75,
-    system_prompt: str | None = None
+    system_prompt: str | None = None,
 ):
     if "InternLM2ForCausalLM" in str(type(model)):
         return generate_answer_internlm(template, tokenizer, model, system_prompt, max_new_tokens)
@@ -73,11 +73,17 @@ def generate_answers_batch(
     max_new_tokens: int = 75,
 ):
     input_ids_list = []
-    for template in templates:
-        inp_ids = tokenizer(template, return_tensors="pt")
-        input_ids_list.append(inp_ids.squeeze(0))
+    valid_indices = []
+    for idx, template in enumerate(templates):
+        if template is not None:
+            inp_ids = tokenizer(template, return_tensors="pt")
+            input_ids_list.append(inp_ids.squeeze(0))
+            valid_indices.append(idx)
 
-    max_length = max([input_ids.shape[0] for input_ids in input_ids_list])
+    if not input_ids_list:
+        return [None] * len(templates)
+
+    max_length = max(input_ids.shape[0] for input_ids in input_ids_list)
     input_ids_padded = []
     for input_ids in input_ids_list:
         pad_length = max_length - input_ids.shape[0]
@@ -111,8 +117,9 @@ def generate_answers_batch(
         **generation_config,
     )
 
-    outputs = []
-    for out_ids, inp_ids in zip(out_ids_all, input_ids_list):
+    outputs = [None] * len(templates)
+    for out_ids, idx in zip(out_ids_all, valid_indices):
+        inp_ids = input_ids_list[valid_indices.index(idx)]
         start_gen = inp_ids.input_ids.shape[1]
         out_ids = out_ids[start_gen:]
         if id_eot in out_ids:
@@ -120,13 +127,13 @@ def generate_answers_batch(
             out = tokenizer.decode(out_ids[:stop])
         else:
             out = tokenizer.decode(out_ids)
-        outputs.append(out.replace("<|start_header_id|>assistant<|end_header_id|>", "").strip())
+        outputs[idx] = out.replace("<|start_header_id|>assistant<|end_header_id|>", "").strip()
     return outputs
 
 
 def get_qa_history_prompt(obs, include_guesses=False):
     question_answers = ""
-    for question, answer, guess in zip_longest(obs.questions, obs.answers, obs.guesses):
+    for question, answer, guess in zip_longest(obs['questions'], obs['answers'], obs['guesses']):
         if not answer:
             continue
         if include_guesses and guess:
