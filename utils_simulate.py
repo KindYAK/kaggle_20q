@@ -28,9 +28,11 @@ def _run_games(
     model,
     id_eot,
 ):
+    from transformers.utils import logging
+    logging.set_verbosity_info()
     games = [Game(keyword=keyword) for keyword in keywords]
     for i in range(20):
-        print("! Running round", i, datetime.datetime.now())
+        # print("! Running round", i, datetime.datetime.now())
         questions = ask_batch(
             obs_list=[_game_to_obs_dict(game) if game.win is None else None for game in games],
             model=model,

@@ -72,6 +72,8 @@ def generate_answers_batch(
     id_eot,
     max_new_tokens: int = 75,
 ):
+    from transformers.utils import logging
+    logging.set_verbosity_info()
     input_ids_list = []
     attention_masks_list = []
     valid_indices = []
