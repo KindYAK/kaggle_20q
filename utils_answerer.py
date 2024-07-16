@@ -21,9 +21,6 @@ Don't output anything else.
     chat_template = f"""<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n{sys_prompt}<|eot_id|>"""
     chat_template += "<|start_header_id|>user<|end_header_id|>\n\n"
     chat_template += f"{user_prompt}<|eot_id|>"
-    print("!!! prompt")
-    print(chat_template)
-    # TODO
     return chat_template
 
 
