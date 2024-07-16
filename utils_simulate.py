@@ -1,5 +1,7 @@
 import datetime
 
+from more_itertools import chunked
+
 from data_collection.models import Game, Round
 from utils_answerer import answer_batch
 from utils_asker import ask_batch
@@ -20,7 +22,7 @@ def _game_to_obs_dict(game: Game):
     }
 
 
-def run_games(
+def _run_games(
     keywords: list[str],
     tokenizer,
     model,
@@ -68,3 +70,22 @@ def run_games(
         if game.win is None:
             game.win = False
     return games
+
+
+def run_games(
+    keywords: list[str],
+    tokenizer,
+    model,
+    id_eot,
+    batch_size: int = 10,
+):
+    results = []
+    for batch in chunked(keywords, batch_size):
+        batch_results = _run_games(
+            keywords=batch,
+            tokenizer=tokenizer,
+            model=model,
+            id_eot=id_eot,
+        )
+        results.extend(batch_results)
+    return results
