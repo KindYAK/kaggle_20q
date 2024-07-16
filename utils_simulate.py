@@ -83,7 +83,7 @@ def run_games(
 ):
     results = []
     for batch in chunked(keywords, batch_size):
-        print("Processing batch of games")
+        print("Processing batch of games", datetime.datetime.now())
         batch_results = _run_games(
             keywords=batch,
             tokenizer=tokenizer,
