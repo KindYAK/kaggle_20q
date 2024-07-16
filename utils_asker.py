@@ -12,7 +12,7 @@ def ask(
     
 {get_qa_history_prompt(obs)}
     
-You goal is to choose the best next question.
+Your goal is to choose the best next question.
 Safe questions are usually ones that split the space of possibilities in half given the previous answers.
 If you have a few questions left, you can start acting more aggressively, intuitively checking some less probable, but high-reward hypotheses.
 

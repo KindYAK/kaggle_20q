@@ -33,7 +33,7 @@ The guessed keyword is "{obs.keyword}".
 
 Another player is asking: "{obs.questions[-1]}".
 
-You goal is to answer this question about the keyword as truthfully as possible.
+Your goal is to answer this question about the keyword as truthfully as possible.
 You can only answer YES or NO. Nothing else. Even if you don't know, even if there's no simple yes/no answer - you still HAVE TO answer YES or NO.
 Given this harsh constraint, still do your best to be useful, truthful, and helpful to the other player.
 

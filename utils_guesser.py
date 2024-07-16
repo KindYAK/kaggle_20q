@@ -13,7 +13,7 @@ def guess(
 
 {get_qa_history_prompt(obs, include_guesses=True)}
 
-You goal is to make a guess about the keyword given the history of questions and answers.
+Your goal is to make a guess about the keyword given the history of questions and answers.
 History above contains previous guesses. When the guess is correct, the game stops. So, there's not reason to try a guess that was already made!
 Also, keep in mind that guess only counts if it's correct letter-by-letter. So, if you have strong reasons to believe that one of the previous guesses is correct, but was
 phrased differently - you can try to guess it again. 
