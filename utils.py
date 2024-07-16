@@ -129,15 +129,10 @@ def generate_answers_batch(
 
     outputs = [None] * len(templates)
     for out_ids, idx in zip(out_ids_all, valid_indices):
-        inp_ids = input_ids_list[valid_indices.index(idx)]
-        start_gen = inp_ids.shape[0]
-        out_ids = out_ids[start_gen:]
-        if id_eot in out_ids:
-            stop = out_ids.tolist().index(id_eot)
-            out = tokenizer.decode(out_ids[:stop])
-        else:
-            out = tokenizer.decode(out_ids)
-        outputs[idx] = out.replace("<|start_header_id|>assistant<|end_header_id|>", "").strip()
+        response_tokens = out_ids[input_ids_padded.shape[1]:]
+        response_tokens = response_tokens[:(response_tokens != 0).nonzero(as_tuple=True)[0][-1] + 1]
+        response = tokenizer.decode(response_tokens, skip_special_tokens=True)
+        outputs[idx] = response.replace("<|start_header_id|>assistant<|end_header_id|>", "").strip()
     return outputs
 
 
