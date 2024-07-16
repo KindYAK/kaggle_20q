@@ -36,8 +36,8 @@ def post_process(output):
     try:
         assert answer in ["yes", "no"], f"Invalid answer: {answer}"
     except AssertionError as e:
-        print("!!! ERROR", answer) # DEBUG TODO
-        print(output)
+        # print("!!! ERROR", answer) # DEBUG TODO
+        # print(output)
         return "no"
     return answer
 
