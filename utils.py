@@ -2,6 +2,8 @@ import re
 import traceback
 from itertools import zip_longest
 
+import torch
+
 
 def generate_answer(
     template,
@@ -61,6 +63,65 @@ def generate_answer(
     else:
         out = tokenizer.decode(out_ids)
     return out.replace("<|start_header_id|>assistant<|end_header_id|>", "").strip()
+
+
+def generate_answers_batch(
+    templates,
+    tokenizer,
+    model,
+    id_eot,
+    max_new_tokens: int = 75,
+):
+    input_ids_list = []
+    for template in templates:
+        inp_ids = tokenizer(template, return_tensors="pt")
+        input_ids_list.append(inp_ids.squeeze(0))
+
+    max_length = max([input_ids.shape[0] for input_ids in input_ids_list])
+    input_ids_padded = []
+    for input_ids in input_ids_list:
+        pad_length = max_length - input_ids.shape[0]
+        padded_input_ids = torch.cat([torch.full((pad_length,), 128009), input_ids])
+        input_ids_padded.append(padded_input_ids)
+
+    input_ids_padded = torch.stack(input_ids_padded)
+
+    terminators = [
+        tokenizer.eos_token_id,
+        tokenizer.convert_tokens_to_ids("<|eot_id|>"),
+        id_eot,
+    ]
+    generation_config = {
+        "do_sample": True,
+        "temperature": 0.5,
+        "top_p": 0.75,
+        "max_new_tokens": max_new_tokens,
+        "num_beams": 1,
+        "repetition_penalty": 1.0, # 1.0 is no penalty
+        "remove_invalid_values": True,
+        "eos_token_id": terminators,
+        "pad_token_id": id_eot,
+        "forced_eos_token_id": id_eot,
+        "use_cache": True,
+        "no_repeat_ngram_size": 0,
+        "num_return_sequences": 1,
+    }
+    out_ids_all = model.generate(
+        input_ids_padded.to("cuda"),
+        **generation_config,
+    )
+
+    outputs = []
+    for out_ids, inp_ids in zip(out_ids_all, input_ids_list):
+        start_gen = inp_ids.input_ids.shape[1]
+        out_ids = out_ids[start_gen:]
+        if id_eot in out_ids:
+            stop = out_ids.tolist().index(id_eot)
+            out = tokenizer.decode(out_ids[:stop])
+        else:
+            out = tokenizer.decode(out_ids)
+        outputs.append(out.replace("<|start_header_id|>assistant<|end_header_id|>", "").strip())
+    return outputs
 
 
 def get_qa_history_prompt(obs, include_guesses=False):
