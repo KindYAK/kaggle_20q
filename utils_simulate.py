@@ -69,7 +69,7 @@ def _run_games(
             if guessed_keyword is None:
                 continue
             def _clean_kw(x):
-                return "".join([c for c in x if c.isalpha()]).lower()
+                return "".join([c for c in x if c.isalpha()]).lower().strip()
             game.rounds[-1].guess = guessed_keyword
             if _clean_kw(guessed_keyword) == _clean_kw(game.keyword):
                 game.win = True
