@@ -23,7 +23,7 @@ def generate_answer(
     ]
     generation_config = {
         "do_sample": True,
-        "temperature": 0.5,
+        "temperature": 0,
         "top_p": 0.75,
         "max_new_tokens": max_new_tokens,
         "num_beams": 1,
