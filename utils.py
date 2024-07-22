@@ -117,7 +117,7 @@ def generate_answers_batch(
         "repetition_penalty": 1.0, # 1.0 is no penalty
         "remove_invalid_values": True,
         "eos_token_id": terminators,
-        "pad_token_id": id_eot,
+        "pad_token_id": 128001,
         "forced_eos_token_id": id_eot,
         "use_cache": True,
         "no_repeat_ngram_size": 0,
