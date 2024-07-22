@@ -94,7 +94,7 @@ def generate_answers_batch(
     attention_masks_padded = []
     for input_ids, attention_mask in zip(input_ids_list, attention_masks_list):
         pad_length = max_length - input_ids.shape[0]
-        padded_input_ids = torch.cat([torch.full((pad_length,), 128009), input_ids])
+        padded_input_ids = torch.cat([torch.full((pad_length,), 128001), input_ids]) # This is <|end_of_text|>
         input_ids_padded.append(padded_input_ids)
 
         padded_attention_mask = torch.cat([torch.zeros(pad_length), attention_mask])
