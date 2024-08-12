@@ -74,7 +74,7 @@ async def call_gpt4(
     messages.append({"role": "user", "content": prompt})
     async with get_semaphore("gpt-4"):
         response = await client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=messages,
             temperature=temperature,
         )
@@ -90,7 +90,7 @@ async def call_gpt4(
                 "game_state": game_state.copy(deep=True),
             }
         )
-        if len(dataset) % 100 == 0:
+        if len(dataset) % 10_000 == 0:
             # with open(f"dataset_{datetime.datetime.now()}.json", "w") as f:
             #     json.dump(dataset, f)
             dt = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
