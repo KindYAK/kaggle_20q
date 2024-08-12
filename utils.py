@@ -196,7 +196,7 @@ SYSTEM_PROMPT_ASKER = """You are an extremely smart experienced "20 Questions" p
 
 The rules of the game are as follows:
 - One player thinks of a keyword, and the other player iteratively asks yes-or-no ((no "I don't know" or "maybe" answers) questions to guess the object.
-- The keyword can be a place (country/city/landmark), a thing (any non-living or living object in the physical world), or something else (concept/material/event/activity/...). However, the keyword is never a person!
+- The keyword is usually a thing (any non-living or living object in the physical world). However, the keyword is never a person or a place (country/city/landmark/etc)!
 
 Keep in mind, that questions will be answered by a small LLM, so aim for simpler questions, and expect some errors in the answers.
 
